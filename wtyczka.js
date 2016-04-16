@@ -4,8 +4,11 @@ $(function () {
         placeholder: "twoj nick"
     });
     $("#email").inputText({
-        placeholder: "yourmail@ex.com"
+        placeholder: "yourmail@sss.com"
     }).keyup(function () {
         $("#email").validateEmail();
+    });
+    $("#password").keyup(function () {
+        $("#password").validatePassword();
     });
 });
