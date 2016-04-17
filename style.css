@@ -5,7 +5,17 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-
+#point1, #point2, #point3{
+    display:inline-block;
+    padding: 3%;
+    background: url(circle1.png) no-repeat 0 30%;
+}
+.valid{
+     border: 1px solid green !important;
+}
+.invalid{
+    border: 1px solid red !important;
+}
 input[type=text],
 input[type=password] {
     width: 100%;

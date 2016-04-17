@@ -34,10 +34,10 @@ $(function () {
         return this.each(function () {
             var pattern = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             if (pattern.test($(this).val())) {
-                $(this).css("border", "1px solid green");
+                $(this).removeClass("invalid").addClass("valid");
                 console.log("dobry mail");
             } else {
-                $(this).css("border", "1px solid red");
+                $(this).removeClass("valid").addClass("invalid");
                 console.log("zly");
             }
         });
@@ -48,19 +48,23 @@ $(function () {
             var password = $(this).val();
             var word = {
                 number: /^[0-9]+$/.test(password),
-                letter: /^\D+$/.test(password),
                 lower: /^[a-z]+$/.test(password),
                 upper: /^[A-Z]+$/.test(password),
                 special: /^\W+$/.test(password)
             };
             var characters = {
                 number: /[0-9]/.test(password),
-                letter: /\D/.test(password),
                 lower: /[a-z]/.test(password),
                 upper: /[A-Z]/.test(password),
                 special: /\W/.test(password)
             };
-
+ 
+            var addPoint = ({
+                background: "url(circle2.png) no-repeat 0 30%"
+            });
+            var removePoint = ({
+                background: "url(circle1.png) no-repeat 0 30%"
+            });
             if (password.length >= 6) {
                 //za kazdy znak +5 pkt
                 points = password.length * 5;
@@ -81,19 +85,26 @@ $(function () {
                     console.log("same znaki specjalne");
                     points -= password.length * 2;
                 }
-
+                //+1pkt za znak specjalny, jesli wszystkie nei sa znakami specjalnymi
+                if(!word.special & characters.special){
+                   // console.log(password.match(/\W/g).length);
+                    points+=password.match(/\W/g).length;
+                  
+                }
+                
                 if (characters.lower & characters.upper) {
                     points += 5;
                     console.log("bonus pomiesznae litery ");
+                } 
+                if (characters.special & characters.number & (characters.lower || characters.upper)) {
+                    console.log("bonus pomiesznae litery liczby znaki");
+                    points += 20;
                 } else if (characters.number & (characters.lower || characters.upper)) {
                     console.log("bonus pomiesznae litery liczby");
                     points += 10;
-                } else if (characters.number & (characters.lower || characters.upper) & characters.special) {
-                    console.log("bonus pomiesznae litery liczby znaki");
-                    points += 20;
                 }
 
-                console.log(password.length + " punkty same " + points);
+                //console.log(password.length + " punkty same " + points);
                 var repeat = 0;
                 var passwordTab = password.split('');
                 var chars = [];
@@ -105,7 +116,7 @@ $(function () {
 
                     if (chars.indexOf(symbol.toString()) == -1) {
                         chars.push(passwordTab[i]);
-                        console.log(symbol + " " + chars.indexOf(symbol.toString()));
+                        //     console.log(symbol + " " + chars.indexOf(symbol.toString()));
 
                         $(passwordTab).each(function (j) {
                             j = i + j + 1;
@@ -121,13 +132,29 @@ $(function () {
 
                 //-1pkt za kazde powtorzenie
                 points -= repeat;
-
-                console.log("ile tych samych " + repeat);
+                
+                if(points>=58){
+                    $("#point1").css(addPoint);
+                    $("#point2").css(addPoint);
+                    $("#point3").css(addPoint);                    
+                } else if(points>=40){ 
+                    $("#point3").css(removePoint);    
+                    $("#point1").css(addPoint);
+                    $("#point2").css(addPoint);
+                }else{
+                     $("#point1").css(removePoint); 
+                     $("#point2").css(removePoint); 
+                     $("#point3").css(removePoint); 
+                }
+              //  console.log("ile tych samych " + repeat);
 
                 console.log(password.length + " punkty" + points);
 
             } else {
                 console.log(password.length + " zbyt krotkie");
+                $("#point1").css(removePoint); 
+                     $("#point2").css(removePoint); 
+                     $("#point3").css(removePoint); 
             }
 
 
