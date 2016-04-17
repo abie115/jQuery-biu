@@ -1,11 +1,11 @@
 /*globals $, jQuery, console */
-$(function () {
+(function ($) {
     $.fn.inputText = function (options) {
         return this.each(function () {
             var settings = $.extend({
                 placeholder: $(this).attr('name'),
                 colorPlaceholder: "#a4a4a4",
-                colorFont: "black",
+                colorFont: "black"
             }, options);
 
             var defaultPlaceholder = settings.placeholder;
@@ -36,6 +36,7 @@ $(function () {
             } else {
                 $(this).removeClass("valid").addClass("invalid");
             }
+            formValid($(this));
         });
     };
 
@@ -44,9 +45,12 @@ $(function () {
             var pattern = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
             if (pattern.test($(this).val())) {
                 $(this).removeClass("invalid").addClass("valid");
+
             } else {
                 $(this).removeClass("valid").addClass("invalid");
+
             }
+            formValid($(this));
         });
     };
     $.fn.validatePassword = function () {
@@ -173,7 +177,7 @@ $(function () {
                 $("#point3").css(removePoint);
                 $(this).removeClass("valid").addClass("invalid");
             }
-
+            formValid($(this));
         });
     };
 
@@ -184,7 +188,7 @@ $(function () {
             var entropyChar = 0;
 
             var entropyPassword = 0;
-            
+
             var characters = {
                 number: /[0-9]/.test(password),
                 lower: /[a-z]/.test(password),
@@ -217,12 +221,47 @@ $(function () {
             entropyPassword = entropyChar * password.length;
             console.log("entropia hasla" + entropyPassword);
 
-             if (entropyPassword>=60) {
+            if (entropyPassword >= 60) {
                 $(this).removeClass("invalid").addClass("valid");
             } else {
                 $(this).removeClass("valid").addClass("invalid");
             }
-          
+            if ($(this).hasClass("invalid")) {
+                console.log("ma klase invalid " + this);
+            }
+            formValid($(this));
+        });
+
+    };
+
+    $.fn.validateSubmit = function () {
+        return this.each(function () {
+            formValid($(this));
         });
     };
+
+    var formValid = function (obj) {
+
+        var form = obj.parents('form');
+        var submit = form.find(':submit');
+        var inputs = form.find(':text, :password');
+
+        var invalid = false;
+        $(inputs).each(function () {
+            var input = $(this);
+            if (!input.hasClass("valid")) {
+                console.log(" jest invalid");
+                invalid = true;
+            }
+        });
+
+        if (invalid) {
+            submit.attr('disabled', 'disabled');
+            console.log("blokuje");
+        } else {
+            submit.removeAttr('disabled');
+            console.log("ODBLOKOWANE");
+        }
+    };
+    
 }(jQuery));
