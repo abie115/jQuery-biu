@@ -24,6 +24,11 @@ $(function () {
     $("#passwordentropy").keyup(function () {
         $("#passwordentropy").validatePasswordEntropy();
     });
+    
+     $("#postcode").keyup(function () {
+        $("#postcode").validatePostCode();
+    });
+
 
 
 });

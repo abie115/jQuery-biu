@@ -82,19 +82,19 @@
                 points = password.length * 5;
                 //-2pkt za kazda litere jeesli hasło ma same liczby lub male litery lub duze litery lub znaki spcjalne
                 if (word.number) {
-                    console.log("same liczby");
+                    // console.log("same liczby");
                     points -= password.length * 2;
                 }
                 if (word.lower) {
-                    console.log("same male litery");
+                    //   console.log("same male litery");
                     points -= password.length * 2;
                 }
                 if (word.upper) {
-                    console.log("same duze litery");
+                    //console.log("same duze litery");
                     points -= password.length * 2;
                 }
                 if (word.special) {
-                    console.log("same znaki specjalne");
+                    // console.log("same znaki specjalne");
                     points -= password.length * 2;
                 }
                 //+1pkt za znak specjalny, jesli wszystkie nei sa znakami specjalnymi
@@ -106,13 +106,13 @@
 
                 if (characters.lower & characters.upper) {
                     points += 5;
-                    console.log("bonus pomiesznae litery ");
+                    // console.log("bonus pomiesznae litery ");
                 }
                 if (characters.special & characters.number & (characters.lower || characters.upper)) {
-                    console.log("bonus pomiesznae litery liczby znaki");
+                    //    console.log("bonus pomiesznae litery liczby znaki");
                     points += 20;
                 } else if (characters.number & (characters.lower || characters.upper)) {
-                    console.log("bonus pomiesznae litery liczby");
+                    //console.log("bonus pomiesznae litery liczby");
                     points += 10;
                 }
 
@@ -168,10 +168,10 @@
                 }
                 //  console.log("ile tych samych " + repeat);
 
-                console.log(password.length + " punkty" + points);
+                //   console.log(password.length + " punkty" + points);
 
             } else {
-                console.log(password.length + " zbyt krotkie");
+                // console.log(password.length + " zbyt krotkie");
                 $("#point1").css(removePoint);
                 $("#point2").css(removePoint);
                 $("#point3").css(removePoint);
@@ -216,19 +216,17 @@
             }
 
             entropyChar = Math.log2(n);
-            console.log("entropia znaku" + entropyChar);
+            // console.log("entropia znaku" + entropyChar);
 
             entropyPassword = entropyChar * password.length;
-            console.log("entropia hasla" + entropyPassword);
+            //console.log("entropia hasla" + entropyPassword);
 
             if (entropyPassword >= 60) {
                 $(this).removeClass("invalid").addClass("valid");
             } else {
                 $(this).removeClass("valid").addClass("invalid");
             }
-            if ($(this).hasClass("invalid")) {
-                console.log("ma klase invalid " + this);
-            }
+
             formValid($(this));
         });
 
@@ -247,21 +245,54 @@
         var inputs = form.find(':text, :password');
 
         var invalid = false;
+
         $(inputs).each(function () {
             var input = $(this);
             if (!input.hasClass("valid")) {
-                console.log(" jest invalid");
                 invalid = true;
             }
-        });
 
+        });
         if (invalid) {
             submit.attr('disabled', 'disabled');
-            console.log("blokuje");
         } else {
             submit.removeAttr('disabled');
-            console.log("ODBLOKOWANE");
         }
     };
-    
+
+
+    $.fn.validatePostCode = function () {
+        return this.each(function () {
+            var postCodeVal = $(this).val();
+            var postCode = $(this);
+            var city;
+            var firstNumber = postCodeVal.substring(0, 1);
+            $.ajax({
+                type: "GET",
+                url: "kody.json",
+                dataType: "json",
+                success: function (data) {        
+                    
+                    $("#postcodecity").removeClass("valid").addClass("invalid");
+                    
+                    postCode.removeClass("valid").addClass("invalid");
+                    
+                    formValid(postCode);
+                    
+                    $(data).each(function (i) {
+                        if (data[i]["KOD POCZTOWY"] == postCodeVal) {
+                            
+                            $("#postcodecity").val(data[i]["MIEJSCOWOŚĆ"]);                     $("#postcodecity").removeClass("invalid").addClass("valid");
+                            
+                            postCode.removeClass("invalid").addClass("valid");
+                            
+                            formValid(postCode);
+                        }
+                    });
+                }
+            });
+        });
+    };
+
+
 }(jQuery));
