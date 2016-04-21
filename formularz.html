@@ -3,8 +3,9 @@
 
 <head>
     <script type="text/javascript" src="jquery-1.12.3.min.js"></script>
-    <script type="text/javascript" src="wtyczka.js"></script>
     <script type="text/javascript" src="walidacja.js"></script>
+    <script type="text/javascript" src="wtyczka.js"></script>
+
     <link rel="stylesheet" type="text/css" href="style.css" />
     <meta charset="UTF-8">
     <title>My form</title>
@@ -12,23 +13,26 @@
 
 <body>
     <div id="form">
+          <h3>Simple form</h3>
         <form>
-             <label for="firstname">First name:</label>
-            <input type="text" id="firstname" name="firstname">
+            <label for="firstname">First name:</label>
+            <input type="text" id="firstname" name="firstname">        
+            <label for="lastname">Last name:</label>
+            <input type="text" id="lastname" name="lasttname">
             <label for="email">E-mail:</label>
             <input type="text" id="email" name="email">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" placeholder="password">
             <div id="points">
                 <div id="point1"></div>
-                <div id="point2"></div>          
+                <div id="point2"></div>
                 <div id="point3"></div>
             </div>
             <label for="passwordentropy">Password entropy:</label>
             <input type="password" id="passwordentropy" name="passwordentropy" placeholder="password">
             <label for="postcode">Post code:</label>
             <input type="text" id="postcode" name="postcode">
-             <input type="text" id="postcodecity" name="postcode">
+            <input type="text" id="postcodecity" name="postcode">
             <input id="submit" type="submit" value="Submit">
         </form>
 

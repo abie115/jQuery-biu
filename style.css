@@ -1,11 +1,12 @@
 #form {
     width: 400px;
-    padding: 5%;
-    background: #fff;
-    border: 1px solid #ccc;
+    height: 70%;
+    padding: 3%;
+    background: #c2d1f0;
+    border: 1px solid #808080;
     border-radius: 4px;
     font-family: Tahoma, Geneva, sans-serif;
-     font-size: 14px;
+    font-size: 14px;
 }
 #point1, #point2, #point3{
     display:inline-block;
@@ -18,22 +19,27 @@
 .invalid{
     border: 1px solid red !important;
 }
+h3{
+    margin:0;
+    padding:0 0 5% 0;
+    text-align: center;
+}
 input[type=text],
 input[type=password],
 input[type=passwordentropy] {
     width: 100%;
-    padding: 2% 2%;
+    padding: 2%;
     margin: 1% 0;
-    border: 1px solid #ccc;
+    border: 1px solid #808080;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
 input[type=submit] {
     width: 100%;
-    padding: 2% 2%;
+    padding: 2%;
     margin: 1% 0;
     border-radius: 4px;
     cursor: pointer;
-    border: 1px solid #ccc;
+    border: 1px solid #808080;
 }

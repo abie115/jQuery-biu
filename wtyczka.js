@@ -1,12 +1,17 @@
 /*globals $*/
 $(function () {
-
     $("#submit").validateSubmit();
 
     $("#firstname").inputText({
         placeholder: "Imię"
     }).validateRegex({
         regex: /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłóńśźż]*$/
+    });
+    
+     $("#lastname").inputText({
+        placeholder: "Nazwisko"
+    }).validateRegex({
+        regex: /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłóńśźż]*(([ ]|[-])?[A-ZĄĆĘŁŃÓŚŹŻ])?[a-ząćęłóńśźż]*$/
     });
 
     $("#email").inputText({
@@ -22,9 +27,5 @@ $(function () {
 
     $("#postcode").inputText({
         placeholder: "XX-XXX"
-    }).validatePostCode();
-
-
-
-
+    }).validatePostCode("#postcodecity");
 });
