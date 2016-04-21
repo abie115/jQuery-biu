@@ -261,7 +261,7 @@
                 var postCode = $(this);
                 $.ajax({
                     type: "GET",
-                    url: "kody.json",
+                    url: "data/kody.json",
                     dataType: "json",
                     success: function (data) {                        
                         $(field).removeClass("valid").addClass("invalid");
