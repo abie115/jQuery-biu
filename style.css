@@ -4,6 +4,8 @@
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-family: Tahoma, Geneva, sans-serif;
+     font-size: 14px;
 }
 #point1, #point2, #point3{
     display:inline-block;

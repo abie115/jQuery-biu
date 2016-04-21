@@ -3,7 +3,7 @@
     $.fn.inputText = function (options) {
         return this.each(function () {
             var settings = $.extend({
-                placeholder: $(this).attr('name'),
+                placeholder: $(this).attr("name"),
                 colorPlaceholder: "#a4a4a4",
                 colorFont: "black"
             }, options);
@@ -45,7 +45,7 @@
     $.fn.validateEmail = function () {
         return this.each(function () {
             $(this).keyup(function () {
-                var pattern = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+                var pattern = /^([\w-]+(\.?[\w-]+)*)@((([\w-]+\.)?)*\w[\w-]{0,50})\.([a-zA-Z]{2,6})$/;
                 if (pattern.test($(this).val())) {
                     $(this).removeClass("invalid").addClass("valid");
 
@@ -57,32 +57,40 @@
             });
         });
     };
-    $.fn.validatePassword = function () {
+    $.fn.validatePassword = function (options) {
         return this.each(function () {
             $(this).keyup(function () {
                 var points = 0;
                 var password = $(this).val();
+                 var settings = $.extend({
+                    maxLength: 6,
+                    addPoint: "url(images/circle2.png) no-repeat 0 30%",
+                    removePoint: "url(images/circle1.png) no-repeat 0 30%"
+                 }, options);
+
                 var word = {
                     number: /^[0-9]+$/.test(password),
                     lower: /^[a-z]+$/.test(password),
                     upper: /^[A-Z]+$/.test(password),
                     special: /^\W+$/.test(password)
                 };
-                var characters = {
+                var character = {
                     number: /[0-9]/.test(password),
                     lower: /[a-z]/.test(password),
                     upper: /[A-Z]/.test(password),
                     special: /\W/.test(password)
                 };
+                
+                var defaultMaxLength = settings.maxLength;
 
                 var addPoint = ({
-                    background: "url(images/circle2.png) no-repeat 0 30%"
+                    background: settings.addPoint
                 });
                 var removePoint = ({
-                    background: "url(images/circle1.png) no-repeat 0 30%"
+                    background: settings.removePoint
                 });
 
-                if (password.length /*>= 6*/ ) {
+                if (password.length >= defaultMaxLength ) {
                     //za kazdy znak +5 pkt
                     points = password.length * 5;
                     //-2pkt za kazda litere jeesli hasło ma same liczby lub male litery lub duze litery lub znaki spcjalne
@@ -102,22 +110,20 @@
                         // console.log("same znaki specjalne");
                         points -= password.length * 2;
                     }
-                    //+1pkt za znak specjalny, jesli wszystkie nei sa znakami specjalnymi
-                    if (!word.special & characters.special) {
-                        // console.log(password.match(/\W/g).length);
+                    //+1pkt za kazdy znak specjalny, wtedy gdy wszystkie nie sa znakami specjalnymi
+                    if (!word.special & character.special) {
                         points += password.match(/\W/g).length;
-
                     }
 
-                    if (characters.lower & characters.upper) {
+                    if (character.lower & character.upper) {
                         points += 5;
-                        // console.log("bonus pomiesznae litery ");
                     }
-                    if (characters.special & characters.number & (characters.lower || characters.upper)) {
-                        //    console.log("bonus pomiesznae litery liczby znaki");
+                    
+                    if (character.special & character.number & (character.lower || character.upper)) {
+                          //  console.log("bonus pomiesznae litery liczby znaki");
                         points += 20;
-                    } else if (characters.number & (characters.lower || characters.upper)) {
-                        //console.log("bonus pomiesznae litery liczby");
+                    } else if (character.number & (character.lower || character.upper)) {
+                       // console.log("bonus pomiesznae litery liczby");
                         points += 10;
                     }
 
@@ -127,13 +133,12 @@
                     var chars = {};
 
                     //liczymy ilosc powtorzen danego symbolu, np dla password
-                    // 121134 1 zostala powtorzona 2 razy
+                    // 121134, 1 zostala powtorzona 2 razy
 
                     $(passwordTab).each(function (i) {
                         var symbol = passwordTab[i];
 
                         if (!chars.hasOwnProperty(symbol)) {
-                            console.log(symbol + " nie ma");
                             chars[symbol] = 1;
                         } else {
                             chars[symbol] = chars[symbol] + 1;
@@ -152,8 +157,8 @@
 
                     //-1pkt za kazde powtorzenie
                     points -= repeat;
-                    console.log(repeat);
-                    console.log(points);
+                //    console.log(repeat);
+                  //  console.log(points);
 
                     if (points >= 58) {
                         $("#point1").css(addPoint);
@@ -176,12 +181,8 @@
                         $("#point3").css(removePoint);
                         $(this).removeClass("valid").addClass("invalid");
                     }
-                    //  console.log("ile tych samych " + repeat);
-
-                    //   console.log(password.length + " punkty" + points);
-
+                  
                 } else {
-                    // console.log(password.length + " zbyt krotkie");
                     $("#point1").css(removePoint);
                     $("#point2").css(removePoint);
                     $("#point3").css(removePoint);
@@ -201,7 +202,7 @@
                 var entropyChar = 0;
                 var entropyPassword = 0;
                 
-                //zliczam ilosci wystapien znaku
+                //zliczam ilosc wystapien znaku
                 $(passwordTab).each(function (i) {
                     var symbol = passwordTab[i];
 
@@ -232,50 +233,6 @@
 
                 formValid($(this));
 
-                /* entropia dla hasla generowanego losow (???)
-                var entropyChar = 0;
-
-                var entropyPassword = 0;
-
-                var characters = {
-                    number: /[0-9]/.test(password),
-                    lower: /[a-z]/.test(password),
-                    upper: /[A-Z]/.test(password),
-                    special: /\W/.test(password)
-                };
-                var countCharacters = {
-                    number: 10,
-                    lower: 26,
-                    upper: 26,
-                    special: 32
-                };
-                //sprawdzam wystepowanie znakow
-                if (characters.number) {
-                    n += countCharacters.number;
-                }
-                if (characters.lower) {
-                    n += countCharacters.lower;
-                }
-                if (characters.upper) {
-                    n += countCharacters.upper;
-                }
-                if (characters.special) {
-                    n += countCharacters.special;
-                }
-
-                entropyChar = Math.log2(n);
-                // console.log("entropia znaku" + entropyChar);
-
-                entropyPassword = entropyChar * password.length;
-                //console.log("entropia hasla" + entropyPassword);
-
-                if (entropyPassword >= 60) {
-                    $(this).removeClass("invalid").addClass("valid");
-                } else {
-                    $(this).removeClass("valid").addClass("invalid");
-                }
-
-                formValid($(this));*/
             });
         });
 
@@ -287,11 +244,10 @@
         });
     };
 
-    var formValid = function (obj) {
-
-        var form = obj.parents('form');
-        var submit = form.find(':submit');
-        var inputs = form.find(':text, :password');
+    var formValid = function (object) {
+        var form = object.parents("form");
+        var submit = form.find("input:submit");
+        var inputs = form.find("input:text, input:password");
 
         var invalid = false;
 
@@ -300,12 +256,12 @@
             if (!input.hasClass("valid")) {
                 invalid = true;
             }
-
         });
+        
         if (invalid) {
-            submit.attr('disabled', 'disabled');
+            submit.attr("disabled", "disabled");
         } else {
-            submit.removeAttr('disabled');
+            submit.removeAttr("disabled");
         }
     };
 
@@ -322,7 +278,7 @@
                     url: "kody.json",
                     dataType: "json",
                     success: function (data) {
-
+                        
                         $("#postcodecity").removeClass("valid").addClass("invalid");
 
                         postCode.removeClass("valid").addClass("invalid");

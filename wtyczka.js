@@ -3,9 +3,6 @@ $(function () {
 
     $("#submit").validateSubmit();
 
-    $("#login").inputText({
-        placeholder: "twoj nick"
-    });
     $("#firstname").inputText({
         placeholder: "Imię"
     }).validateRegex({
@@ -13,15 +10,19 @@ $(function () {
     });
 
     $("#email").inputText({
-        placeholder: "yourmail@sss.com"
+        placeholder: "yourmail@example.com"
     }).validateEmail();
 
 
-    $("#password").validatePassword();
+    $("#password").validatePassword({
+        maxLength:7
+    });
 
     $("#passwordentropy").validatePasswordEntropy();
 
-    $("#postcode").validatePostCode();
+    $("#postcode").inputText({
+        placeholder: "XX-XXX"
+    }).validatePostCode();
 
 
 
